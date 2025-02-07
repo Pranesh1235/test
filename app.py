@@ -68,11 +68,12 @@ if st.button("Generate Meme"):
 # Function to get meme ideas
 def get_meme_idea():
     try:
-        prompt = ("give me 10 meme ideas that are relatable to pneumonia vaccine, "
+        prompt = ("give me 10 meme ideas that relatable to pneumonia vaccine, "
                   "pneumonia is not flu, misinformation about pneumonia, and "
-                  "other things related to pneumonia. i want those in a positive "
-                  "tone. the ideas should be in casual bahasa indonesia.")
-
+                  "other things related to pneumonia. i want those in positive "
+                  "tone. the ideas should be in casual bahasa indonesia. you just "
+                  "need to give the ideas, dont suggest any caption, images, "
+                  "emojis, etc. be sharp and crisp and punchy don't verbose also don't give the number like 1,2 for 10 sentence also * too")
         url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
         headers = {'Content-Type': 'application/json'}
         payload = {
