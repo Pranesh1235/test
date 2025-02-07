@@ -33,7 +33,7 @@ st.markdown(
 # Load environment variables
 
 # Set up logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message.s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s') # Corrected line: Added missing parenthesis
 
 SUPER_MEME_API_KEY = os.getenv("SUPER_MEME_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
