@@ -3,12 +3,27 @@ import requests
 import os
 import logging
 
-# Set white background for the app
+# Set white background and glow effect styles
 st.markdown(
     """
     <style>
     body {
         background-color: white;
+    }
+    .glow {
+        text-shadow: 0 0 8px #0ff, 0 0 12px #0ff; /* Cyan glow */
+    }
+    .stButton > button {
+        border: 2px solid #4CAF50; /* Green border */
+        color: white;
+        background-color: #2196F3; /* Blue background */
+        padding: 10px 24px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: box-shadow 0.3s ease;
+    }
+    .stButton > button:hover {
+        box-shadow: 0 0 15px rgba(33, 150, 243, 0.7); /* Blue glow on hover */
     }
     </style>
     """,
@@ -18,13 +33,14 @@ st.markdown(
 # Load environment variables
 
 # Set up logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message.s')
 
 SUPER_MEME_API_KEY = os.getenv("SUPER_MEME_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 # Streamlit app setup
-st.title("AI Meme Generator")
+st.title("AI Meme Generator") # Removed glow class from title for now, see note below
+st.markdown("<h1 class='glow'>AI Meme Generator</h1>", unsafe_allow_html=True) # Apply glow effect to title
 st.markdown("Transform your ideas into hilarious memes with AI!")
 
 # Initialize session state for meme_text if it doesn't exist
@@ -81,6 +97,20 @@ if st.button("Generate Meme"):
     else:
         st.error("Please enter a meme idea.")
 
+# Separator to visually separate meme generation and idea section
+st.markdown("---")
+
+# Button to get meme ideas
+if st.button("Get Meme Ideas"): # Button stays here, always rendered
+    ideas = get_meme_idea()
+    if ideas:
+        st.subheader("Meme Ideas:")
+        selected_idea = st.radio("Choose a meme idea:", ideas)
+        if selected_idea:
+            st.session_state.meme_text = selected_idea # Update session state with selected idea
+    else:
+        st.error("Failed to get meme ideas. Try again.")
+
 # Function to get meme ideas
 def get_meme_idea():
     try:
@@ -127,21 +157,3 @@ def get_meme_idea():
         ideas_list = [idea.strip() for idea in text_response.split("\n") if idea.strip()]
         logging.info(f"Successfully retrieved {len(ideas_list)} meme ideas from Gemini API.")
         return ideas_list
-
-    except requests.exceptions.RequestException as e:
-        logging.error(f"API request to Gemini failed: {e}")
-        return None
-    except Exception as e:
-        logging.exception("Unexpected error during idea generation:")
-        return None
-
-# Button to get meme ideas
-if st.button("Get Meme Ideas"):
-    ideas = get_meme_idea()
-    if ideas:
-        st.subheader("Meme Ideas:")
-        selected_idea = st.radio("Choose a meme idea:", ideas)
-        if selected_idea:
-            st.session_state.meme_text = selected_idea # Update session state with selected idea
-    else:
-        st.error("Failed to get meme ideas. Try again.")
