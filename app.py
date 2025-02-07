@@ -3,6 +3,18 @@ import requests
 import os
 import logging
 
+# Set white background for the app
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: white;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Load environment variables
 
 # Set up logging
@@ -15,8 +27,12 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 st.title("AI Meme Generator")
 st.markdown("Transform your ideas into hilarious memes with AI!")
 
+# Initialize session state for meme_text if it doesn't exist
+if 'meme_text' not in st.session_state:
+    st.session_state.meme_text = ""
+
 # Input field for meme idea
-meme_text = st.text_area("Describe your meme idea...", max_chars=300)
+meme_text = st.text_area("Describe your meme idea...", max_chars=300, value=st.session_state.meme_text, key="meme_text_area")
 char_count = len(meme_text)
 
 st.write(f"Character count: {char_count}/300")
@@ -124,7 +140,8 @@ if st.button("Get Meme Ideas"):
     ideas = get_meme_idea()
     if ideas:
         st.subheader("Meme Ideas:")
-        for idea in ideas:
-            st.write(f"- {idea}")
+        selected_idea = st.radio("Choose a meme idea:", ideas)
+        if selected_idea:
+            st.session_state.meme_text = selected_idea # Update session state with selected idea
     else:
         st.error("Failed to get meme ideas. Try again.")
